@@ -58,7 +58,7 @@ WeMos D1 Mini | Nokia 5110 PCD8544 LCD
 ------------- | ---------------
 D2 (GPIO4)    | 0 RST
 D1 (GPIO5)    | 1 CE
-D6 (GPIO12)   | 2 DC
+D8 (GPIO15)   | 2 DC
 D7 (GPIO13)   | 3 Din
 D5 (GPIO14)   | 4 Clk
 3V3           | 5 Vcc
