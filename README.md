@@ -69,6 +69,7 @@ G             | 7 Gnd
 
 * [WeMos D1 Mini](http://www.wemos.cc/Products/d1_mini.html)
 * [micropython.org](http://micropython.org)
+* [TM1637 version](https://github.com/mcauser/micropython-tm1637)
 
 ## Credits
 
