@@ -56,21 +56,18 @@ blank   | 0b00000000 | 0x00 | 0
 
 WeMos D1 Mini | Nokia 5110 PCD8544 LCD
 ------------- | ---------------
-D2 (GPIO4)    | 0 RST
-D1 (GPIO5)    | 1 CE
+D3 (GPIO0)    | 0 RST
+D4 (GPIO2)    | 1 CE
 D8 (GPIO15)   | 2 DC
 D7 (GPIO13)   | 3 Din
 D5 (GPIO14)   | 4 Clk
 3V3           | 5 Vcc
-D0 (GPIO16)   | 6 BL
+D6 (GPIO12)   | 6 BL
 G             | 7 Gnd
 
 ## Links
 
+* [MicroPython PCD8544 Driver](https://github.com/mcauser/micropython-pcd8544)
 * [WeMos D1 Mini](http://www.wemos.cc/Products/d1_mini.html)
 * [micropython.org](http://micropython.org)
 * [TM1637 version](https://github.com/mcauser/micropython-tm1637)
-
-## Credits
-
-* Markus Birth's [wipy Nokia 5110 library](https://github.com/mbirth/wipy-upcd8544) (MIT license) with [my ESP8266 modifications](https://github.com/mbirth/wipy-upcd8544/issues/1).

@@ -1,25 +1,28 @@
 # WeMos D1 Mini -- Nokia 5110 PCD8544 LCD
-# D2 (GPIO4) ----- 0 RST
-# D1 (GPIO5) ----- 1 CE
+# D3 (GPIO0) ----- 0 RST
+# D4 (GPIO2) ----- 1 CE
 # D8 (GPIO15) ---- 2 DC
 # D7 (GPIO13) ---- 3 Din
 # D5 (GPIO14) ---- 4 Clk
 # 3V3 ------------ 5 Vcc
-# D0 (GPIO16) ---- 6 BL
+# D6 (GPIO12) ---- 6 BL
 # G -------------- 7 Gnd
 
 from machine import Pin, SPI
 import time
-import upcd8544
+import pcd8544
 import nokia7seg
 
 spi = SPI(1)
 spi.init(baudrate=8000000, polarity=0, phase=0)
-RST = Pin(4)
-CE = Pin(5)
-DC = Pin(15)
-BL = Pin(16)
-lcd = upcd8544.PCD8544(spi, RST, CE, DC, BL)
+cs = Pin(2)
+dc = Pin(15)
+rst = Pin(0)
+
+# backlight on
+bl = Pin(12, Pin.OUT, value=1)
+
+lcd = pcd8544.PCD8544(spi, cs, dc, rst)
 display = nokia7seg.Nokia7Seg(lcd)
 
 # all LEDS on "8.8.:8.8."
