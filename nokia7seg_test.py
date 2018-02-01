@@ -54,9 +54,11 @@ for i in range(255):
 
 # show "AbCd"
 display.write([119, 124, 57, 94])
+display.show('abcd')
 
 # show "COOL"
 display.write([0b00111001, 0b00111111, 0b00111111, 0b00111000])
+display.show('cool')
 
 # converts a digit 0-0x0f to a byte representing a single segment
 # use write() to render the byte on a single segment
@@ -158,3 +160,18 @@ display.numbers(-5,11)
 
 # show "12:59"
 display.numbers(12,59)
+
+# Show Help
+display.show('Help')
+display.write(display.encode_string('Help'))
+
+# Scroll Hello World from right to left
+display.scroll('Hello World') # 4 fps
+display.scroll('Hello World', 1000) # 1 fps
+
+# Scroll all available characters
+display.scroll(list(nokia7seg._SEGMENTS))
+
+# show temperature '24*C'
+display.temperature(24)
+display.show('24*C')

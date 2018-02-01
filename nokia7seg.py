@@ -1,7 +1,8 @@
 import framebuf
+from time import sleep_ms
 
-# 0-9, a-f, blank, dash
-_SEGMENTS = [63,6,91,79,102,109,125,7,127,111,119,124,57,94,121,113,0,64]
+# 0-9, a-z, blank, dash, star
+_SEGMENTS = bytearray(b'\x3F\x06\x5B\x4F\x66\x6D\x7D\x07\x7F\x6F\x77\x7C\x39\x5E\x79\x71\x3D\x76\x06\x1E\x76\x38\x55\x54\x3F\x73\x67\x50\x6D\x78\x3E\x1C\x2A\x76\x6E\x5B\x00\x40\x63')
 
 class Nokia7Seg:
 	def __init__(self,lcd):
@@ -67,7 +68,8 @@ class Nokia7Seg:
 
 	def write(self, segments, pos=0):
 		"""Display up to 4 segments moving right from a given position.
-		The MSB is the decimal point."""
+		The MSB in the 2nd segment controls the colon between the 2nd
+		and 3rd segments."""
 		if not 0 <= pos <= 3:
 			raise ValueError("Position out of range")
 
@@ -81,33 +83,30 @@ class Nokia7Seg:
 		return _SEGMENTS[digit & 0x0f]
 
 	def encode_string(self, string):
-		"""Convert an up to 4 character length string containing 0-9, a-f,
-		space, dash to an array of segments, matching the length of the
+		"""Convert an up to 4 character length string containing 0-9, a-z,
+		space, dash, star to an array of segments, matching the length of the
 		source string."""
-		segments = bytearray(4)
-		for i in range(0, min(4, len(string))):
+		segments = bytearray(len(string))
+		for i in range(len(string)):
 			segments[i] = self.encode_char(string[i])
 		return segments
 
 	def encode_char(self, char):
-		"""Convert a character 0-9, a-f, space or dash to a segment."""
+		"""Convert a character 0-9, a-z, space, dash or star to a segment."""
 		o = ord(char)
-		# space
 		if o == 32:
-			return _SEGMENTS[16]
-		# dash
+			return _SEGMENTS[36] # space
+		if o == 42:
+			return _SEGMENTS[38] # star/degrees
 		if o == 45:
-			return _SEGMENTS[17]
-		# uppercase A-F
-		if o >= 65 and o <= 70:
-			return _SEGMENTS[o-55]
-		# lowercase a-f
-		if o >= 97 and o <= 102:
-			return _SEGMENTS[o-87]
-		# 0-9
+			return _SEGMENTS[37] # dash
+		if o >= 65 and o <= 90:
+			return _SEGMENTS[o-55] # uppercase A-Z
+		if o >= 97 and o <= 122:
+			return _SEGMENTS[o-87] # lowercase a-z
 		if o >= 48 and o <= 57:
-			return _SEGMENTS[o-48]
-		raise ValueError("Character out of range")
+			return _SEGMENTS[o-48] # 0-9
+		raise ValueError("Character out of range: {:d} '{:s}'".format(o, chr(o)))
 
 	def hex(self, val):
 		"""Display a hex value 0x0000 through 0xffff, right aligned."""
@@ -129,3 +128,26 @@ class Nokia7Seg:
 		segments = self.encode_string('{0:0>2d}{1:0>2d}'.format(num1, num2))
 		self.write(segments)
 		self.colon(colon)
+
+	def temperature(self, num):
+		if num < -9:
+			self.show('lo') # low
+		elif num > 99:
+			self.show('hi') # high
+		else:
+			string = '{0: >2d}'.format(num)
+			self.write(self.encode_string(string))
+		self.write([_SEGMENTS[38], _SEGMENTS[12]], 2) # degrees C
+
+	def show(self, string, colon=False):
+		segments = self.encode_string(string)
+		self.write(segments[:4])
+		self.colon(colon)
+
+	def scroll(self, string, delay=250):
+		segments = string if isinstance(string, list) else self.encode_string(string)
+		data = [0] * 8
+		data[4:0] = list(segments)
+		for i in range(len(segments) + 5):
+			self.write(data[0+i:4+i])
+			sleep_ms(delay)
