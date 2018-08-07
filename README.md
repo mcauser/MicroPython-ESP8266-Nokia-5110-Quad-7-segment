@@ -92,3 +92,7 @@ G             | 7 Gnd
 * [WeMos D1 Mini](https://wiki.wemos.cc/products:d1:d1_mini)
 * [micropython.org](http://micropython.org)
 * [TM1637 version](https://github.com/mcauser/micropython-tm1637)
+
+## License
+
+Licensed under the [MIT License](http://opensource.org/licenses/MIT).

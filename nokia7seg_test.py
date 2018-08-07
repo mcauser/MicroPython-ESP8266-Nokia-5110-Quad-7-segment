@@ -1,3 +1,5 @@
+# Emulating a TM1637 quad 7-segment display module on a Nokia 5110 display
+
 # WeMos D1 Mini -- Nokia 5110 PCD8544 LCD
 # D3 (GPIO0) ----- 0 RST
 # D4 (GPIO2) ----- 1 CE
